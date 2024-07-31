@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var editText1: EditText
     private lateinit var button: Button
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textView12: TextView
     private var tries = 0
     private lateinit var wordToGuess: String
+    private var wordLength = 4  // Default to 4 letters
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,59 +39,38 @@ class MainActivity : AppCompatActivity() {
         textView12 = findViewById(R.id.myTextView12)
         resetButton = findViewById(R.id.resetButton)
 
-        wordToGuess = FourLetterWordList.getRandomFourLetterWord()
+        findViewById<Button>(R.id.fourLetterButton).setOnClickListener {
+            wordLength = 4
+            startGame()
+        }
+
+        findViewById<Button>(R.id.fiveLetterButton).setOnClickListener {
+            wordLength = 5
+            startGame()
+        }
+
         resetButton.setOnClickListener {
             resetGame()
         }
         button.setOnClickListener {
             val guess: String = editText1.text.toString().uppercase()
             val result: String = checkGuess(guess)
-
-            when (tries) {
-                0 -> {
-                    textView7.text = guess
-                    textView8.text = result
-                    textView7.visibility = View.VISIBLE
-                    textView8.visibility = View.VISIBLE
-                }
-                1 -> {
-                    textView9.text = guess
-                    textView10.text = result
-                    textView9.visibility = View.VISIBLE
-                    textView10.visibility = View.VISIBLE
-                }
-                2 -> {
-                    textView11.text = guess
-                    textView12.text = result
-                    textView11.visibility = View.VISIBLE
-                    textView12.visibility = View.VISIBLE
-                }
-            }
-
-            if (result == "OOOO") {
-                Toast.makeText(it.context, "Dammmmmmmm Brooooooooo!!!", Toast.LENGTH_LONG).show()
-                answerTextView.visibility = View.VISIBLE
-                answerTextView.text = "Correct! The word was $wordToGuess"
-                resetButton.isEnabled = true // Enable reset button to start a new game
-            } else {
-                if (tries == 2) {
-                    answerTextView.visibility = View.VISIBLE
-                    answerTextView.text = "Out of tries! The word was $wordToGuess"
-                    Toast.makeText(it.context, "Chiiii ita bhi Guess nai kr paya Chutiyeeee!!!!!", Toast.LENGTH_LONG).show()
-                    resetButton.isEnabled = true // Enable reset button to start a new game
-                } else {
-                    Toast.makeText(it.context, "Try again!", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            if (tries < 2) {
-                tries++
-            }
+            updateUI(guess, result)
         }
     }
-        private fun checkGuess(guess: String): String {
+
+    private fun startGame() {
+        wordToGuess = if (wordLength == 4) {
+            FourLetterWordList.getRandomFourLetterWord()
+        } else {
+            FiveLetterWordList.getRandomFiveLetterWord()
+        }
+        resetGame()
+    }
+
+    private fun checkGuess(guess: String): String {
         var result = ""
-        for (i in 0..3) {
+        for (i in 0 until wordLength) {  // Use 'until wordLength' to dynamically adjust the loop based on the word length
             result += if (guess[i] == wordToGuess[i]) {
                 "O"
             } else if (guess[i] in wordToGuess) {
@@ -101,10 +82,15 @@ class MainActivity : AppCompatActivity() {
         return result
     }
 
+
     private fun resetGame() {
         editText1.text.clear()
         answerTextView.visibility = View.GONE
-        wordToGuess = FourLetterWordList.getRandomFourLetterWord()
+        wordToGuess = if (wordLength == 4) {
+            FourLetterWordList.getRandomFourLetterWord()
+        } else {
+            FiveLetterWordList.getRandomFiveLetterWord()
+        }
         tries = 0
         textView7.visibility = View.GONE
         textView8.visibility = View.GONE
@@ -113,4 +99,49 @@ class MainActivity : AppCompatActivity() {
         textView11.visibility = View.GONE
         textView12.visibility = View.GONE
     }
+
+
+    private fun updateUI(guess: String, result: String) {
+        when (tries) {
+            0 -> {
+                textView7.text = guess
+                textView8.text = result
+                textView7.visibility = View.VISIBLE
+                textView8.visibility = View.VISIBLE
+            }
+            1 -> {
+                textView9.text = guess
+                textView10.text = result
+                textView9.visibility = View.VISIBLE
+                textView10.visibility = View.VISIBLE
+            }
+            2 -> {
+                textView11.text = guess
+                textView12.text = result
+                textView11.visibility = View.VISIBLE
+                textView12.visibility = View.VISIBLE
+            }
+        }
+
+        if (result == "OOOO") {
+            Toast.makeText(this, "Dammmmmmmm Brooooooooo!!!", Toast.LENGTH_LONG).show()
+            answerTextView.visibility = View.VISIBLE
+            answerTextView.text = "Correct! The word was $wordToGuess"
+            resetButton.isEnabled = true // Enable reset button to start a new game
+        } else {
+            if (tries == 2) {
+                answerTextView.visibility = View.VISIBLE
+                answerTextView.text = "Out of tries! The word was $wordToGuess"
+                Toast.makeText(this, "Chiiii ita bhi Guess nai kr paya Chutiyeeee!!!!!", Toast.LENGTH_LONG).show()
+                resetButton.isEnabled = true
+            } else {
+                Toast.makeText(this, "Try again!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (tries < 2) {
+            tries++
+        }
+    }
 }
+

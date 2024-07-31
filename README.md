@@ -47,7 +47,3 @@ For support or business inquiries, please email us at [aarushjain890@gmail.com](
 ---
 
 Happy playing, and keep guessing!
-
-```
-
-This README template provides a comprehensive overview of your app, including how to get started, how to use it, and how to contribute. Adjust the sections as necessary to better fit your project's needs.

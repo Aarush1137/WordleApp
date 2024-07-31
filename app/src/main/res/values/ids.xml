@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="guessButton" type="id" />
+    <item name="myTextView11" type="id" />
+    <item name="myTextView9" type="id" />
+    <item name="myTextView7" type="id" />
+    <item name="myTextView8" type="id" />
+    <item name="myTextView12" type="id" />
+    <item name="answerTextView" type="id" />
+    <item name="editText1" type="id" />
+    <item name="myTextView10" type="id" />
+    <item name="mTextView4" type="id" />
+    <item name="myTextView3" type="id" />
+    <item name="myTextView5" type="id" />
+    <item name="myTextView6" type="id" />
+    <item name="myTextView2" type="id" />
+    <item name="myTextView1" type="id" />
+</resources>
